@@ -11,6 +11,10 @@ venv/
 # Documentation
 README.md
 
+# Project directories
+cache/
+output/
+
 # Claude
 .claude/
 
