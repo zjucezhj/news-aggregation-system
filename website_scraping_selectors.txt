@@ -1,0 +1,153 @@
+新闻网站爬取HTML选择器汇总
+=============================
+
+本文档列出了新闻聚合系统中各个网站爬取所使用的HTML标签和CSS选择器，
+用于提取文章标题和正文内容。
+
+生成时间：2025-09-09
+
+=============================================
+1. CNN (edition.cnn.com)
+=============================================
+
+网站URL：https://edition.cnn.com
+
+标题选择器（按优先级）：
+- h1.headline__text
+- h1.pg-headline
+- h1.article-title
+- h1
+
+正文选择器（按优先级）：
+- .article__content
+- .l-container__content
+- .article-content
+- .content
+
+特殊处理：
+- 移除元素：script, style, .advertisement, .social-share
+- 文章链接验证：必须包含日期格式 /\d{4}/\d{2}/\d{2}/
+- 排除类型：video, gallery, opinion, live-news, weather, sport, entertainment, tv
+
+=============================================
+2. Mail & Guardian (mg.co.za)
+=============================================
+
+网站URL：https://mg.co.za
+
+标题选择器（按优先级）：
+- h1.entry-title
+- h1.post-title
+- h1.article-title
+- h1.title
+- h1
+
+正文选择器（按优先级）：
+- .entry-content
+- .post-content
+- .article-content
+- .content
+- article
+
+特殊处理：
+- 移除元素：script, style, .advertisement, .social-share
+- 排除类型：category, tag, author, search, contact, about, privacy, terms, advertise, subscribe, login, register, opinion, letters, cartoon
+
+=============================================
+3. This Day Live (thisdaylive.com)
+=============================================
+
+网站URL：https://www.thisdaylive.com
+
+标题选择器（按优先级）：
+- h1.entry-title
+- h1.post-title
+- h1.article-title
+- h1.title
+- h1
+
+正文选择器（按优先级）：
+- .entry-content
+- .post-content
+- .article-content
+- .content
+- article
+
+特殊处理：
+- 移除元素：script, style, ads, .ads, .social-share
+- 主要内容区域：class包含"wp-singular"的元素
+- 段落过滤：最小长度20字符，排除以"share"、"click"开头的内容，排除"advertisement"
+- 备用方案：提取所有<p>标签，过滤后组合
+
+=============================================
+4. 基础爬取器（默认选择器）
+=============================================
+
+当专用爬取器无法提取内容时使用的默认选择器：
+
+标题选择器（按优先级）：
+- h1
+- .title
+- .article-title
+- .post-title
+- title（HTML title标签）
+
+正文选择器（按优先级）：
+- .article-content
+- .post-content
+- .entry-content
+- .content
+- article
+- .main-content
+
+默认处理：
+- 移除元素：script, style, nav, header, footer, aside
+- 段落提取：所有<p>标签，最小长度30字符
+- 内容限制：最多10个段落
+
+=============================================
+通用配置说明
+=============================================
+
+1. 文章链接验证规则：
+   - 标题最小长度：10字符
+   - 排除模式：category, tag, author, search, contact, about, privacy, terms, advertise, subscribe, login, register
+
+2. 内容清理规则：
+   - 移除空白字符：\s+ 替换为单个空格
+   - 文本修剪：去除首尾空格
+   - HTML标签清理：移除script, style等非内容元素
+
+3. 缓存机制：
+   - HTML文件缓存：使用URL的MD5哈希作为文件名
+   - 缓存目录：./cache/
+   - 文件格式：原始HTML文件
+
+4. 爬取限制：
+   - 单次最大文章数：20篇
+   - 请求超时：30秒
+   - 用户代理：浏览器默认UA
+
+=============================================
+选择器优先级说明
+=============================================
+
+每个网站的爬取器都按照以下优先级尝试选择器：
+
+1. 专用选择器：针对特定网站优化的CSS选择器
+2. 通用选择器：常用的文章容器选择器
+3. 备用方案：提取所有段落并进行过滤
+4. 最后手段：提取整个body内容
+
+这种设计确保了在各种网站结构变化的情况下，仍能提取到内容。
+
+=============================================
+维护说明
+=============================================
+
+- 当网站结构变化时，需要更新对应的选择器
+- 新增网站时，建议先分析网站结构，确定最佳选择器
+- 可以通过测试单个文章URL来验证选择器效果
+- 建议定期检查爬取效果，及时调整选择器
+
+=============================================

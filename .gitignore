@@ -12,8 +12,7 @@ venv/
 README.md
 
 # Project directories
-cache/
-output/
+results/
 
 # Claude
 .claude/
@@ -24,6 +23,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+__init__.py
 build/
 develop-eggs/
 dist/
